@@ -1,0 +1,1589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Samos TV - Premium Streaming Service</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* CSS Variables for Theme */
+        :root {
+            --primary: #e50914;
+            --secondary: #0071eb;
+            --dark-bg: #141414;
+            --dark-card: #1f1f1f;
+            --dark-overlay: rgba(0, 0, 0, 0.75);
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --text-tertiary: #6d6d6e;
+            --success: #46d369;
+            --warning: #e87c03;
+            --font-main: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            --transition: all 0.3s ease;
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            --card-radius: 8px;
+            --section-spacing: 3rem;
+        }
+
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a {
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            font-family: inherit;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4 {
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        /* Layout Components */
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Header & Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.25rem 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7) 0%, transparent 100%);
+            z-index: 100;
+            transition: var(--transition);
+        }
+
+        header.scrolled {
+            background-color: var(--dark-bg);
+            box-shadow: var(--shadow);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .logo i {
+            margin-right: 0.5rem;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin: 0 1rem;
+        }
+
+        nav ul li a {
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+
+        nav ul li a:hover,
+        nav ul li a.active {
+            color: var(--text-secondary);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .search-container {
+            position: relative;
+            margin-right: 1.5rem;
+        }
+
+        .search-input {
+            background-color: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.5rem 1rem 0.5rem 2.5rem;
+            border-radius: 4px;
+            color: var(--text-primary);
+            width: 0;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .search-input.active {
+            width: 240px;
+            opacity: 1;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+
+        .user-menu {
+            position: relative;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            background-color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .dropdown {
+            position: absolute;
+            top: 40px;
+            right: 0;
+            background-color: var(--dark-card);
+            border-radius: 4px;
+            width: 180px;
+            padding: 0.5rem 0;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+
+        .dropdown.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .dropdown ul {
+            list-style: none;
+        }
+
+        .dropdown ul li {
+            padding: 0.7rem 1.5rem;
+        }
+
+        .dropdown ul li a {
+            display: block;
+            transition: var(--transition);
+        }
+
+        .dropdown ul li a:hover {
+            color: var(--primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 80vh;
+            position: relative;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .hero-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            padding: 0 5%;
+        }
+
+        .hero-slide.active {
+            opacity: 1;
+        }
+
+        .hero-content {
+            max-width: 600px;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .hero-info span {
+            margin-right: 1rem;
+        }
+
+        .rating {
+            color: var(--success);
+        }
+
+        .hero-description {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.8rem 2rem;
+            border-radius: 4px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #f40612;
+        }
+
+        .btn-secondary {
+            background-color: rgba(109, 109, 110, 0.7);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(109, 109, 110, 0.5);
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, var(--dark-bg) 0%, transparent 50%);
+        }
+
+        /* Content Sections */
+        .section {
+            padding: 2rem 0;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .see-all {
+            color: var(--secondary);
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .see-all:hover {
+            text-decoration: underline;
+        }
+
+        .content-row {
+            display: flex;
+            overflow-x: auto;
+            gap: 1rem;
+            padding: 0.5rem 0;
+            scrollbar-width: none; /* Firefox */
+        }
+
+        .content-row::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Edge */
+        }
+
+        .content-card {
+            flex: 0 0 auto;
+            width: 220px;
+            background-color: var(--dark-card);
+            border-radius: var(--card-radius);
+            overflow: hidden;
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .content-card:hover {
+            transform: scale(1.05);
+            z-index: 10;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        .card-img {
+            width: 100%;
+            height: 0;
+            padding-bottom: 150%;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .card-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, transparent 50%);
+            opacity: 0;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 1rem;
+        }
+
+        .content-card:hover .card-overlay {
+            opacity: 1;
+        }
+
+        .card-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-info {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 1rem;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: var(--transition);
+        }
+
+        .content-card:hover .card-actions {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            transition: var(--transition);
+        }
+
+        .action-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .action-btn.favorite.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* Live TV Section */
+        .live-tv {
+            background-color: var(--dark-card);
+            padding: 3rem 0;
+            border-radius: var(--card-radius);
+        }
+
+        .channel-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .channel-card {
+            background-color: var(--dark-bg);
+            border-radius: var(--card-radius);
+            overflow: hidden;
+            text-align: center;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .channel-card:hover {
+            transform: scale(1.05);
+        }
+
+        .channel-logo {
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            position: relative;
+        }
+
+        .channel-logo img {
+            max-height: 60px;
+            max-width: 100%;
+        }
+
+        .live-badge {
+            background-color: var(--primary);
+            color: white;
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        .channel-name {
+            padding: 1rem;
+            font-weight: 600;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .play-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .channel-card:hover .play-btn {
+            opacity: 1;
+        }
+
+        /* Video Player Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--dark-overlay);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            width: 90%;
+            max-width: 900px;
+            background-color: var(--dark-bg);
+            border-radius: var(--card-radius);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .close-modal {
+            background: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+        }
+
+        .video-player {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark-card);
+            padding: 3rem 0;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-logo i {
+            margin-right: 0.5rem;
+        }
+
+        .footer-links h3 {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links ul li {
+            margin-bottom: 0.7rem;
+        }
+
+        .footer-links ul li a {
+            color: var(--text-secondary);
+            transition: var(--transition);
+        }
+
+        .footer-links ul li a:hover {
+            color: var(--text-primary);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-icons a {
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+
+        .social-icons a:hover {
+            color: var(--primary);
+        }
+
+        .copyright {
+            margin-top: 3rem;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Search Results */
+        .search-results {
+            padding: 2rem 0;
+            display: none;
+        }
+
+        .search-results.active {
+            display: block;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+
+        /* Favorites Section */
+        .favorites-section {
+            display: none;
+        }
+
+        .favorites-section.active {
+            display: block;
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .content-card {
+                width: 200px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem;
+            }
+            
+            nav ul {
+                display: none;
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .hero-description {
+                font-size: 1rem;
+            }
+            
+            .content-card {
+                width: 160px;
+            }
+            
+            .channel-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            }
+            
+            .search-input.active {
+                width: 180px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero {
+                height: 70vh;
+            }
+            
+            .hero-title {
+                font-size: 1.8rem;
+            }
+            
+            .btn {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.9rem;
+            }
+            
+            .content-card {
+                width: 140px;
+            }
+            
+            .channel-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+            
+            .search-input.active {
+                width: 150px;
+            }
+            
+            .modal-content {
+                width: 95%;
+            }
+        }
+
+        /* Accessibility */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Focus styles for keyboard navigation */
+        button:focus-visible,
+        a:focus-visible {
+            outline: 2px solid var(--secondary);
+            outline-offset: 2px;
+        }
+
+        /* Lazy loading */
+        .lazy-load {
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .lazy-load.loaded {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header>
+        <div class="logo">
+            <i class="fas fa-play-circle"></i>
+            <span>SAMOS TV</span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#" class="active">Home</a></li>
+                <li><a href="#">TV Shows</a></li>
+                <li><a href="#">Movies</a></li>
+                <li><a href="#">Live TV</a></li>
+                <li><a href="#" id="favorites-link">My List</a></li>
+            </ul>
+        </nav>
+        <div class="nav-right">
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Search titles...">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+            <div class="user-menu">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="dropdown">
+                    <ul>
+                        <li><a href="#">Profile</a></li>
+                        <li><a href="#">Settings</a></li>
+                        <li><a href="#" id="logout">Sign Out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-slide active" style="background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://source.unsplash.com/random/1920x1080/?movie');">
+            <div class="hero-content">
+                <h1 class="hero-title">Stranger Worlds</h1>
+                <div class="hero-info">
+                    <span class="rating">96% Match</span>
+                    <span>2023</span>
+                    <span>16+</span>
+                    <span>2h 15m</span>
+                </div>
+                <p class="hero-description">In a small town where everyone knows everyone, a peculiar incident starts a chain of events that leads to the discovery of a mysterious government project.</p>
+                <div class="hero-actions">
+                    <button class="btn btn-primary"><i class="fas fa-play"></i> Play</button>
+                    <button class="btn btn-secondary"><i class="fas fa-info-circle"></i> More Info</button>
+                </div>
+            </div>
+            <div class="hero-overlay"></div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Trending Section -->
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">Trending Now</h2>
+                <a href="#" class="see-all">See All</a>
+            </div>
+            <div class="content-row" id="trending-row">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- New Releases Section -->
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">New Releases</h2>
+                <a href="#" class="see-all">See All</a>
+            </div>
+            <div class="content-row" id="new-releases-row">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Live TV Section -->
+        <section class="section live-tv">
+            <div class="section-header">
+                <h2 class="section-title">Live TV Channels</h2>
+                <a href="#" class="see-all">See All</a>
+            </div>
+            <div class="channel-grid" id="live-channels">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Popular Section -->
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">Popular on Samos TV</h2>
+                <a href="#" class="see-all">See All</a>
+            </div>
+            <div class="content-row" id="popular-row">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Recommended Section -->
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">Recommended For You</h2>
+                <a href="#" class="see-all">See All</a>
+            </div>
+            <div class="content-row" id="recommended-row">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Favorites Section -->
+        <section class="section favorites-section" id="favorites-section">
+            <div class="section-header">
+                <h2 class="section-title">My List</h2>
+            </div>
+            <div class="content-row" id="favorites-row">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Search Results Section -->
+        <section class="search-results" id="search-results">
+            <div class="section-header">
+                <h2 class="section-title">Search Results</h2>
+            </div>
+            <div class="content-row" id="search-results-row">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+            <div class="no-results" id="no-results">
+                <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                <h3>No titles found</h3>
+                <p>Try searching for something else</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Video Player Modal -->
+    <div class="modal" id="player-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="player-title">Stranger Worlds</h3>
+                <button class="close-modal" id="close-player">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="video-container">
+                <video class="video-player" id="video-player" controls>
+                    <!-- Video source will be set dynamically -->
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <div class="footer-logo">
+                        <i class="fas fa-play-circle"></i>
+                        <span>SAMOS TV</span>
+                    </div>
+                    <p>Samos Global Technologies Inc. provides premium streaming service with thousands of movies, TV shows, and live channels.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h3>Navigation</h3>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">TV Shows</a></li>
+                        <li><a href="#">Movies</a></li>
+                        <li><a href="#">Live TV</a></li>
+                        <li><a href="#">My List</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="#">Account</a></li>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Devices</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                        <li><a href="#">Copyright</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Samos Global Technologies Inc. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // API Adapter Module
+        const api = (function() {
+            // Expanded video links with unique open source and public domain videos
+            const videoLinks = [
+                "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+                "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+                "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+                "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+                "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+                "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+                "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+                "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
+                "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Subway.mp4",
+                "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4",
+                "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4",
+                "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4",
+                "https://archive.org/download/night_of_the_living_dead/night_of_the_living_dead.mp4",
+                "https://archive.org/download/white-zombie-1932/white-zombie-1932.mp4",
+                "https://archive.org/download/charade_201903/Charade.mp4",
+                "https://archive.org/download/his-girl-friday/his-girl-friday.mp4",
+                "https://archive.org/download/TheGeneralBusterKeaton1926/TheGeneralBusterKeaton1926_512kb.mp4",
+                "https://archive.org/download/CarnivalOfSouls1962/CarnivalOfSouls1962.mp4",
+                "https://archive.org/download/HouseOnHauntedHill1959/HouseOnHauntedHill1959.mp4",
+                "https://archive.org/download/plan_9_from_outer_space_ipod/Plan9FromOuterSpace.mp4",
+                "https://archive.org/download/SteamboatWillie_201711/SteamboatWillie.mp4",
+                "https://archive.org/download/PopeyeSindbadTheSailor/PopeyeSindbadTheSailor.mp4",
+                "https://archive.org/download/BettyBoopCinderella_201612/BettyBoopCinderella.mp4",
+                "https://archive.org/download/Superman_The_Mechanical_Monsters/Superman_The_Mechanical_Monsters_512kb.mp4",
+                "https://archive.org/download/TheLittleShopOfHorrors1960/TheLittleShopOfHorrors1960.mp4",
+                "https://archive.org/download/TheLastManOnEarth1964/TheLastManOnEarth1964.mp4",
+                "https://archive.org/download/terror_is_a_man_ipod/TerrorIsAMan.mp4",
+                "https://archive.org/download/brain_that_wouldnt_die_ipod/BrainThatWouldntDie.mp4",
+                "https://archive.org/download/the_terror_ipod/TheTerror.mp4",
+                "https://archive.org/download/santa_claus_conquers_the_martians_ipod/SantaClausConquersTheMartians.mp4",
+                "https://archive.org/download/betty_boop_snow_white_1933/Betty_Boop_Snow_White_1933.mp4",
+                "https://archive.org/download/Popeye_Aladdin_and_His_Wonderful_Lamp/Popeye_Aladdin_and_His_Wonderful_Lamp_512kb.mp4",
+                "https://archive.org/download/gullivers_travels_ipod_video/GulliversTravels.mp4",
+                "https://archive.org/download/Superman_Billion_Dollar_Limited/Superman_Billion_Dollar_Limited_512kb.mp4",
+                "https://archive.org/download/Nosferatu_DVD_quality/Nosferatu_DVD_quality.mp4",
+                "http://vjs.zencdn.net/v/oceans.mp4"
+            ];
+
+            // Trending movie titles from 2025
+            const trendingTitles = [
+                "KPop Demon Hunters", "The Bad Guys 2", "Elio", "The Legend of Hei 2", "Ne Zha 2", "Hoppers", "Zootopia 2", "The Smurfs Movie", "Moana 2", "The King of Kings", "The Wild Robot", "Aang: The Last Airbender", "Bambi The Reckoning", "The SpongeBob Movie: Search for SquarePants", "Animal Farm", "Anpanman: Chapon's Hero", "Arco", "Aztec Batman: Clash of Empires", "Dog Man", "GOAT", "In Your Dreams", "Lilo & Stitch", "Pookoo", "Scarlet", "Savages", "The Day the Earth Blew Up: A Looney Tunes Movie"
+            ];
+
+            // Open source movies data (base list)
+            const openSourceMovies = [
+                { id: 1, title: "Sintel", year: "2010", type: "Movie", rating: "92%", duration: "14m", maturity: "PG", image: "https://i.ibb.co/0jq6Z0z/sintel.jpg", description: "A young woman searches for a baby dragon she raised from infancy.", video: videoLinks[0] },
+                { id: 2, title: "Big Buck Bunny", year: "2008", type: "Movie", rating: "89%", duration: "10m", maturity: "G", image: "https://i.ibb.co/6RJ0HZ3/big-buck-bunny.jpg", description: "A large and lovable rabbit deals with three tiny bullies.", video: videoLinks[1] },
+                { id: 3, title: "Elephants Dream", year: "2006", type: "Movie", rating: "78%", duration: "11m", maturity: "PG", image: "https://i.ibb.co/3pZ7q4n/elephants-dream.jpg", description: "Two men explore a strange industrial world of the future.", video: videoLinks[2] },
+                { id: 4, title: "Tears of Steel", year: "2012", type: "Movie", rating: "85%", duration: "12m", maturity: "PG-13", image: "https://i.ibb.co/6BHk3Wd/tears-of-steel.jpg", description: "In a dystopian future, soldiers attempt to repair an android.", video: videoLinks[3] },
+                { id: 5, title: "Cosmos Laundromat", year: "2015", type: "Movie", rating: "91%", duration: "12m", maturity: "PG", image: "https://i.ibb.co/0Q8q4J7/cosmos.jpg", description: "A depressed sheep gets a new lease on life from a mysterious salesman.", video: videoLinks[4] },
+                { id: 6, title: "Caminandes", year: "2013", type: "Short", rating: "88%", duration: "2m", maturity: "G", image: "https://i.ibb.co/0Q8q4J7/caminandes.jpg", description: "A llama tries to get past a fence to eat some tasty bushes.", video: videoLinks[5] },
+                { id: 7, title: "Agent 327", year: "2017", type: "Short", rating: "93%", duration: "4m", maturity: "PG", image: "https://i.ibb.co/0Q8q4J7/agent327.jpg", description: "A secret agent battles villains in this animated short.", video: videoLinks[6] },
+                { id: 8, title: "The Daily Dweebs", year: "2010", type: "Series", rating: "82%", duration: "22m", maturity: "PG", image: "https://i.ibb.co/0Q8q4J7/daily-dweebs.jpg", description: "The misadventures of office workers in a tech company.", video: videoLinks[7] },
+                { id: 9, title: "Hero", year: "2018", type: "Short", rating: "87%", duration: "5m", maturity: "PG", image: "https://i.ibb.co/0Q8q4J7/hero.jpg", description: "A young girl discovers her superpowers and saves the day.", video: videoLinks[8] },
+                { id: 10, title: "The Oceanmaker", year: "2014", type: "Short", rating: "90%", duration: "8m", maturity: "PG", image: "https://i.ibb.co/0Q8q4J7/oceanmaker.jpg", description: "A pilot fights to save the last source of water in a barren world.", video: videoLinks[9] },
+                { id: 11, title: "The Secret Number", year: "2013", type: "Short", rating: "86%", duration: "7m", maturity: "PG", image: "https://source.unsplash.com/random/300x450/?movie,11", description: "A psychiatrist encounters a patient with a bizarre mathematical theory.", video: videoLinks[10] },
+                { id: 12, title: "The Raven", year: "2012", type: "Short", rating: "88%", duration: "10m", maturity: "PG-13", image: "https://source.unsplash.com/random/300x450/?movie,12", description: "Edgar Allan Poe's classic poem brought to life in animated form.", video: videoLinks[11] },
+                { id: 13, title: "The Wraith of Cobble Hill", year: "2005", type: "Short", rating: "84%", duration: "18m", maturity: "PG-13", image: "https://source.unsplash.com/random/300x450/?movie,13", description: "A troubled teenager navigates life in a Brooklyn neighborhood.", video: videoLinks[12] },
+                { id: 14, title: "The Backwater Gospel", year: "2011", type: "Short", rating: "91%", duration: "10m", maturity: "16+", image: "https://source.unsplash.com/random/300x450/?movie,14", description: "A dark tale about a town where death follows the arrival of the undertaker.", video: videoLinks[13] },
+                { id: 15, title: "The Legend of the Sky Kingdom", year: "2003", type: "Movie", rating: "79%", duration: "1h 20m", maturity: "PG", image: "https://source.unsplash.com/random/300x450/?movie,15", description: "Three children embark on a journey to find the legendary Sky Kingdom.", video: videoLinks[14] },
+                { id: 16, title: "Steamboat Willie", year: "1928", type: "Cartoon", rating: "95%", duration: "8m", maturity: "G", image: "https://source.unsplash.com/random/300x450/?cartoon,16", description: "Mickey's classic debut as he pilots a steamboat.", video: videoLinks[21] },
+                { id: 17, title: "Popeye the Sailor Meets Sindbad the Sailor", year: "1936", type: "Cartoon", rating: "90%", duration: "16m", maturity: "G", image: "https://source.unsplash.com/random/300x450/?cartoon,17", description: "Popeye battles Sindbad in this colorful adventure.", video: videoLinks[22] },
+                { id: 18, title: "Betty Boop in Cinderella", year: "1934", type: "Cartoon", rating: "85%", duration: "7m", maturity: "G", image: "https://source.unsplash.com/random/300x450/?cartoon,18", description: "Betty Boop's take on the classic fairy tale.", video: videoLinks[23] },
+                { id: 19, title: "Superman: The Mechanical Monsters", year: "1941", type: "Cartoon", rating: "88%", duration: "10m", maturity: "G", image: "https://source.unsplash.com/random/300x450/?cartoon,19", description: "Superman fights giant robots.", video: videoLinks[24] },
+                { id: 20, title: "Night of the Living Dead", year: "1968", type: "Movie", rating: "96%", duration: "1h 36m", maturity: "R", image: "https://source.unsplash.com/random/300x450/?horror,20", description: "Zombies rise and terrorize a group of survivors.", video: videoLinks[13] },
+                // Add trending 2025 movies with cycled links
+                { id: 21, title: "KPop Demon Hunters", year: "2025", type: "Movie", rating: "95%", duration: "1h 45m", maturity: "PG-13", image: "https://source.unsplash.com/random/300x450/?animation,kpop", description: "A group of KPop stars fight demons in this musical adventure.", video: videoLinks[0] },
+                { id: 22, title: "The Bad Guys 2", year: "2025", type: "Movie", rating: "92%", duration: "1h 40m", maturity: "PG", image: "https://source.unsplash.com/random/300x450/?animation,badguys", description: "The reformed villains embark on a new heist.", video: videoLinks[1] },
+                { id: 23, title: "Elio", year: "2025", type: "Movie", rating: "94%", duration: "1h 30m", maturity: "PG", image: "https://source.unsplash.com/random/300x450/?animation,elio", description: "A young boy is abducted by aliens and must find his way home.", video: videoLinks[2] },
+                { id: 24, title: "The Legend of Hei 2", year: "2025", type: "Movie", rating: "93%", duration: "1h 50m", maturity: "PG-13", image: "https://source.unsplash.com/random/300x450/?animation,hei", description: "Continuation of the spirit world adventures.", video: videoLinks[3] },
+                { id: 25, title: "Ne Zha 2", year: "2025", type: "Movie", rating: "91%", duration: "2h", maturity: "PG", image: "https://source.unsplash.com/random/300x450/?animation,nezha", description: "The young god faces new challenges in ancient China.", video: videoLinks[4] },
+                { id: 26, title: "Hoppers", year: "2025", type: "Movie", rating: "90%", duration: "1h 35m", maturity: "G", image: "https://source.unsplash.com/random/300x450/?animation,hoppers", description: "Adventures of hopping creatures in a magical world.", video: videoLinks[5] },
+                { id: 27, title: "Zootopia 2", year: "2025", type: "Movie", rating: "96%", duration: "1h 45m", maturity: "PG", image: "https://source.unsplash.com/random/300x450/?animation,zootopia", description: "Judy and Nick solve a new mystery in the animal city.", video: videoLinks[6] },
+                { id: 28, title: "The Smurfs Movie", year: "2025", type: "Movie", rating: "88%", duration: "1h 30m", maturity: "G", image: "https://source.unsplash.com/random/300x450/?animation,smurfs", description: "The blue creatures face Gargamel once again.", video: videoLinks[7] },
+                { id: 29, title: "Moana 2", year: "2025", type: "Movie", rating: "95%", duration: "1h 50m", maturity: "PG", image: "https://source.unsplash.com/random/300x450/?animation,moana", description: "Moana embarks on a new ocean adventure.", video: videoLinks[8] },
+                { id: 30, title: "The King of Kings", year: "2025", type: "Movie", rating: "89%", duration: "2h", maturity: "PG-13", image: "https://source.unsplash.com/random/300x450/?animation,king", description: "Epic tale of royalty and destiny.", video: videoLinks[9] },
+                // Continue adding more from the list
+                { id: 31, title: "The Wild Robot", year: "2025", type: "Movie", rating: "94%", duration: "1h 40m", maturity: "PG", image: "https://source.unsplash.com/random/300x450/?animation,robot", description: "A robot adapts to life in the wilderness.", video: videoLinks[10] },
+                { id: 32, title: "Aang: The Last Airbender", year: "2025", type: "Movie", rating: "92%", duration: "1h 45m", maturity: "PG", image: "https://source.unsplash.com/random/300x450/?animation,aang", description: "The avatar masters the elements.", video: videoLinks[11] },
+                { id: 33, title: "Bambi The Reckoning", year: "2025", type: "Movie", rating: "87%", duration: "1h 30m", maturity: "PG-13", image: "https://source.unsplash.com/random/300x450/?animation,bambi", description: "A darker take on the classic story.", video: videoLinks[12] },
+                { id: 34, title: "The SpongeBob Movie: Search for SquarePants", year: "2025", type: "Movie", rating: "90%", duration: "1h 35m", maturity: "G", image: "https://source.unsplash.com/random/300x450/?animation,spongebob", description: "SpongeBob on a new underwater quest.", video: videoLinks[13] },
+                { id: 35, title: "Animal Farm", year: "2025", type: "Movie", rating: "93%", duration: "1h 40m", maturity: "PG", image: "https://source.unsplash.com/random/300x450/?animation,farm", description: "Animals rebel against their human owners.", video: videoLinks[14] },
+                { id: 36, title: "Anpanman: Chapon's Hero", year: "2025", type: "Movie", rating: "85%", duration: "1h 20m", maturity: "G", image: "https://source.unsplash.com/random/300x450/?animation,anpanman", description: "Bread-headed hero saves the day.", video: videoLinks[15] },
+                { id: 37, title: "Arco", year: "2025", type: "Movie", rating: "91%", duration: "1h 30m", maturity: "PG", image: "https://source.unsplash.com/random/300x450/?animation,arco", description: "Musical adventure in a colorful world.", video: videoLinks[16] },
+                { id: 38, title: "Aztec Batman: Clash of Empires", year: "2025", type: "Movie", rating: "89%", duration: "1h 45m", maturity: "PG-13", image: "https://source.unsplash.com/random/300x450/?animation,aztec", description: "Batman in ancient Aztec times.", video: videoLinks[17] },
+                { id: 39, title: "Dog Man", year: "2025", type: "Movie", rating: "88%", duration: "1h 25m", maturity: "G", image: "https://source.unsplash.com/random/300x450/?animation,dogman", description: "Half dog, half man superhero antics.", video: videoLinks[18] },
+                { id: 40, title: "GOAT", year: "2025", type: "Movie", rating: "94%", duration: "1h 40m", maturity: "PG", image: "https://source.unsplash.com/random/300x450/?animation,goat", description: "Greatest of all time sports story.", video: videoLinks[19] },
+                // Add more if needed, but generate the rest
+            ];
+
+            // Function to generate more movies, including cartoons and trending
+            function generateMovies(count) {
+                const genres = ["Action", "Comedy", "Drama", "Sci-Fi", "Horror", "Romance", "Thriller", "Documentary", "Animation", "Adventure"];
+                const types = ["Movie", "Series", "Short", "Cartoon"];
+                const maturityRatings = ["G", "PG", "PG-13", "16+", "18+"];
+                
+                for (let i = openSourceMovies.length + 1; i <= count; i++) {
+                    const genre = genres[Math.floor(Math.random() * genres.length)];
+                    const type = types[Math.floor(Math.random() * types.length)];
+                    const year = Math.floor(Math.random() * 25) + 2000;
+                    const rating = Math.floor(Math.random() * 21) + 80;
+                    const maturity = maturityRatings[Math.floor(Math.random() * maturityRatings.length)];
+                    const videoIndex = (i - 1) % videoLinks.length;
+                    const titleIndex = (i - 1) % trendingTitles.length;
+                    const title = type === "Cartoon" ? "Cartoon " + trendingTitles[titleIndex] : trendingTitles[titleIndex] + " " + i;
+                    
+                    openSourceMovies.push({
+                        id: i,
+                        title: title,
+                        year: year.toString(),
+                        type: type,
+                        rating: `${rating}%`,
+                        duration: type === "Movie" ? `${Math.floor(Math.random() * 2) + 1}h ${Math.floor(Math.random() * 60)}m` : 
+                                 type === "Series" ? `${Math.floor(Math.random() * 10) + 20}m` : `${Math.floor(Math.random() * 15) + 5}m`,
+                        maturity: maturity,
+                        image: `https://source.unsplash.com/random/300x450/?${genre.toLowerCase()},${i}`,
+                        description: `A captivating ${genre.toLowerCase()} ${type.toLowerCase()} exploring ${Math.random() > 0.5 ? "an extraordinary journey" : "unexpected events"} in a thrilling setting.`,
+                        video: videoLinks[videoIndex]
+                    });
+                }
+            }
+            
+            // Generate 200+ movies
+            generateMovies(250);
+
+            // Expanded live channels with unique m3u8 streams
+            const liveChannels = [
+                { id: 1, name: "News Channel", logo: "https://source.unsplash.com/random/100x100/?news,1", live: true, stream: "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8" },
+                { id: 2, name: "Sports Network", logo: "https://source.unsplash.com/random/100x100/?sports,2", live: true, stream: "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8" },
+                { id: 3, name: "Movie Channel", logo: "https://source.unsplash.com/random/100x100/?movie,3", live: true, stream: "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.mp4/.m3u8" },
+                { id: 4, name: "Kids Network", logo: "https://source.unsplash.com/random/100x100/?cartoon,4", live: true, stream: "https://cph-p2p-msl.akamaized.net/hls/live/2000341/test/master.m3u8" },
+                { id: 5, name: "Music Channel", logo: "https://source.unsplash.com/random/100x100/?music,5", live: true, stream: "https://moctobpltc-i.akamaihd.net/hls/live/571329/eight/playlist.m3u8" },
+                { id: 6, name: "Documentary", logo: "https://source.unsplash.com/random/100x100/?documentary,6", live: true, stream: "http://d3rlna7iyyu8wu.cloudfront.net/skip_armstrong/skip_armstrong_stereo_subs.m3u8" },
+                { id: 7, name: "Comedy Central", logo: "https://source.unsplash.com/random/100x100/?comedy,7", live: true, stream: "http://d3rlna7iyyu8wu.cloudfront.net/skip_armstrong/skip_armstrong_multichannel_subs.m3u8" },
+                { id: 8, name: "Science Channel", logo: "https://source.unsplash.com/random/100x100/?science,8", live: true, stream: "http://d3rlna7iyyu8wu.cloudfront.net/skip_armstrong/skip_armstrong_multi_language_subs.m3u8" },
+                { id: 9, name: "Cartoon Channel", logo: "https://source.unsplash.com/random/100x100/?cartoon,9", live: true, stream: "http://amssamples.streaming.mediaservices.windows.net/91492735-c523-432b-ba01-faba6c2206a2/AzureMediaServicesPromo.ism/manifest(format=m3u8-aapl)" },
+                { id: 10, name: "Adventure TV", logo: "https://source.unsplash.com/random/100x100/?adventure,10", live: true, stream: "http://amssamples.streaming.mediaservices.windows.net/69fbaeba-8e92-4740-aedc-ce09ae945073/AzurePromo.ism/manifest(format=m3u8-aapl)" },
+                { id: 11, name: "Horror Network", logo: "https://source.unsplash.com/random/100x100/?horror,11", live: true, stream: "http://amssamples.streaming.mediaservices.windows.net/634cd01c-6822-4630-8444-8dd6279f94c6/CaminandesLlamaDrama4K.ism/manifest(format=m3u8-aapl)" },
+                { id: 12, name: "Romance Channel", logo: "https://source.unsplash.com/random/100x100/?romance,12", live: true, stream: "http://sample.vodobox.net/skate_phantom_flex_4k/skate_phantom_flex_4k.m3u8" },
+                { id: 13, name: "Sci-Fi TV", logo: "https://source.unsplash.com/random/100x100/?scifi,13", live: true, stream: "http://playertest.longtailvideo.com/adaptive/wowzaid3/playlist.m3u8" },
+                { id: 14, name: "Drama Network", logo: "https://source.unsplash.com/random/100x100/?drama,14", live: true, stream: "http://cdn-fms.rbs.com.br/vod/hls_sample1_manifest.m3u8" },
+                { id: 15, name: "Animation Channel", logo: "https://source.unsplash.com/random/100x100/?animation,15", live: true, stream: "http://nasatv-lh.akamaihd.net/i/NASA_101@319270/index_1000_av-p.m3u8?sd=10&rebase=on" },
+                { id: 16, title: "Thriller TV", year: "2025", type: "Channel", rating: "90%", duration: "Live", maturity: "PG-13", image: "https://source.unsplash.com/random/100x100/?thriller,16", description: "Thrilling live content.", video: "http://content.jwplatform.com/manifests/vM7nH0Kl.m3u8" },
+                { id: 17, name: "History Channel", logo: "https://source.unsplash.com/random/100x100/?history,17", live: true, stream: "http://walterebert.com/playground/video/hls/sintel-trailer.m3u8" },
+                { id: 18, name: "Nature Network", logo: "https://source.unsplash.com/random/100x100/?nature,18", live: true, stream: "http://qthttp.apple.com.edgesuite.net/1010qwoeiuryfg/sl.m3u8" },
+                { id: 19, name: "Music Videos", logo: "https://source.unsplash.com/random/100x100/?music,19", live: true, stream: "https://devimages.apple.com.edgekey.net/streaming/examples/bipbop_16x9/bipbop_16x9_variant.m3u8" },
+                { id: 20, name: "Cartoon Live", logo: "https://source.unsplash.com/random/100x100/?cartoon,20", live: true, stream: "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8" },
+                { id: 21, name: "Action Live", logo: "https://source.unsplash.com/random/100x100/?action,21", live: true, stream: "https://d1gnaphp93fop2.cloudfront.net/videos/multiresolution/rendition_new10.m3u8" },
+                { id: 22, name: "Comedy Live", logo: "https://source.unsplash.com/random/100x100/?comedy,22", live: true, stream: "https://res.cloudinary.com/dannykeane/video/upload/sp_full_hd/q_80:qmax_90,ac_none/v1/dk-memoji-dark.m3u8" },
+                { id: 23, name: "Test Channel", logo: "https://source.unsplash.com/random/100x100/?test,23", live: true, stream: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" },
+                { id: 24, name: "Fitfest Channel", logo: "https://source.unsplash.com/random/100x100/?fitness,24", live: true, stream: "https://diceyk6a7voy4.cloudfront.net/e78752a1-2e83-43fa-85ae-3d508be29366/hls/fitfest-sample-1_Ott_Hls_Ts_Avc_Aac_16x9_1280x720p_30Hz_6.0Mbps_qvbr.m3u8" }
+            ];
+
+            return {
+                getMovies: () => {
+                    return new Promise((resolve) => {
+                        setTimeout(() => {
+                            resolve(openSourceMovies);
+                        }, 500); // Simulate network delay
+                    });
+                },
+                
+                getLiveChannels: () => {
+                    return new Promise((resolve) => {
+                        setTimeout(() => {
+                            resolve(liveChannels);
+                        }, 500);
+                    });
+                },
+                
+                searchMovies: (query) => {
+                    return new Promise((resolve) => {
+                        setTimeout(() => {
+                            const results = openSourceMovies.filter(movie => 
+                                movie.title.toLowerCase().includes(query.toLowerCase()) ||
+                                movie.description.toLowerCase().includes(query.toLowerCase())
+                            );
+                            resolve(results);
+                        }, 300);
+                    });
+                }
+            };
+        })();
+
+        // App Module
+        const app = (function(api) {
+            // DOM Elements
+            const elements = {
+                trendingRow: document.getElementById('trending-row'),
+                newReleasesRow: document.getElementById('new-releases-row'),
+                popularRow: document.getElementById('popular-row'),
+                recommendedRow: document.getElementById('recommended-row'),
+                favoritesRow: document.getElementById('favorites-row'),
+                liveChannels: document.getElementById('live-channels'),
+                searchResults: document.getElementById('search-results'),
+                searchResultsRow: document.getElementById('search-results-row'),
+                noResults: document.getElementById('no-results'),
+                searchInput: document.querySelector('.search-input'),
+                searchIcon: document.querySelector('.search-icon'),
+                playerModal: document.getElementById('player-modal'),
+                videoPlayer: document.getElementById('video-player'),
+                playerTitle: document.getElementById('player-title'),
+                closePlayer: document.getElementById('close-player'),
+                userAvatar: document.querySelector('.user-avatar'),
+                dropdown: document.querySelector('.dropdown'),
+                favoritesLink: document.getElementById('favorites-link'),
+                favoritesSection: document.getElementById('favorites-section'),
+                header: document.querySelector('header')
+            };
+
+            // State
+            let state = {
+                movies: [],
+                favorites: JSON.parse(localStorage.getItem('favorites')) || [],
+                history: JSON.parse(localStorage.getItem('history')) || [],
+                searchQuery: '',
+                isSearchActive: false
+            };
+
+            // Initialize the app
+            function init() {
+                loadContent();
+                setupEventListeners();
+                updateFavoritesSection();
+            }
+
+            // Load all content
+            function loadContent() {
+                api.getMovies().then(movies => {
+                    state.movies = movies;
+                    renderTrending();
+                    renderNewReleases();
+                    renderPopular();
+                    renderRecommended();
+                });
+
+                api.getLiveChannels().then(channels => {
+                    renderLiveChannels(channels);
+                });
+            }
+
+            // Setup event listeners
+            function setupEventListeners() {
+                // Search functionality
+                elements.searchIcon.addEventListener('click', toggleSearch);
+                elements.searchInput.addEventListener('input', handleSearch);
+                
+                // Video player
+                elements.closePlayer.addEventListener('click', closeVideoPlayer);
+                elements.playerModal.addEventListener('click', (e) => {
+                    if (e.target === elements.playerModal) {
+                        closeVideoPlayer();
+                    }
+                });
+                
+                // User menu
+                elements.userAvatar.addEventListener('click', toggleUserMenu);
+                
+                // Favorites link
+                elements.favoritesLink.addEventListener('click', showFavorites);
+                
+                // Scroll event for header
+                window.addEventListener('scroll', handleScroll);
+                
+                // Logout
+                document.getElementById('logout').addEventListener('click', handleLogout);
+            }
+
+            // Toggle search input
+            function toggleSearch() {
+                elements.searchInput.classList.toggle('active');
+                if (elements.searchInput.classList.contains('active')) {
+                    elements.searchInput.focus();
+                } else {
+                    elements.searchInput.value = '';
+                    elements.searchResults.classList.remove('active');
+                    state.isSearchActive = false;
+                }
+            }
+
+            // Handle search input
+            function handleSearch(e) {
+                const query = e.target.value.trim();
+                state.searchQuery = query;
+                
+                if (query.length > 2) {
+                    state.isSearchActive = true;
+                    elements.searchResults.classList.add('active');
+                    elements.favoritesSection.classList.remove('active');
+                    
+                    api.searchMovies(query).then(results => {
+                        renderSearchResults(results);
+                    });
+                } else if (query.length === 0) {
+                    elements.searchResults.classList.remove('active');
+                    state.isSearchActive = false;
+                }
+            }
+
+            // Toggle user menu
+            function toggleUserMenu() {
+                elements.dropdown.classList.toggle('active');
+            }
+
+            // Show favorites section
+            function showFavorites(e) {
+                e.preventDefault();
+                elements.favoritesSection.classList.toggle('active');
+                elements.searchResults.classList.remove('active');
+                state.isSearchActive = false;
+                updateFavoritesSection();
+            }
+
+            // Handle scroll event
+            function handleScroll() {
+                if (window.scrollY > 50) {
+                    elements.header.classList.add('scrolled');
+                } else {
+                    elements.header.classList.remove('scrolled');
+                }
+            }
+
+            // Handle logout
+            function handleLogout(e) {
+                e.preventDefault();
+                // In a real app, this would call an API
+                alert('Logout successful!');
+            }
+
+            // Close video player
+            function closeVideoPlayer() {
+                elements.playerModal.classList.remove('active');
+                elements.videoPlayer.pause();
+                elements.videoPlayer.currentTime = 0;
+            }
+
+            // Open video player
+            function openVideoPlayer(movie) {
+                elements.playerTitle.textContent = movie.title;
+                elements.videoPlayer.src = movie.video;
+                elements.playerModal.classList.add('active');
+                elements.videoPlayer.play();
+                
+                // Add to history
+                addToHistory(movie);
+            }
+
+            // Toggle favorite
+            function toggleFavorite(movie) {
+                const index = state.favorites.findIndex(fav => fav.id === movie.id);
+                
+                if (index === -1) {
+                    state.favorites.push(movie);
+                } else {
+                    state.favorites.splice(index, 1);
+                }
+                
+                // Save to localStorage
+                localStorage.setItem('favorites', JSON.stringify(state.favorites));
+                
+                // Update UI
+                updateFavoritesSection();
+            }
+
+            // Add to history
+            function addToHistory(movie) {
+                // Check if already in history
+                const index = state.history.findIndex(item => item.id === movie.id);
+                
+                if (index !== -1) {
+                    // Remove from current position
+                    state.history.splice(index, 1);
+                }
+                
+                // Add to beginning of history
+                state.history.unshift(movie);
+                
+                // Keep only the last 50 items
+                if (state.history.length > 50) {
+                    state.history.pop();
+                }
+                
+                // Save to localStorage
+                localStorage.setItem('history', JSON.stringify(state.history));
+            }
+
+            // Update favorites section
+            function updateFavoritesSection() {
+                if (state.favorites.length > 0) {
+                    elements.favoritesRow.innerHTML = '';
+                    state.favorites.forEach(movie => {
+                        elements.favoritesRow.appendChild(createMovieCard(movie));
+                    });
+                } else {
+                    elements.favoritesRow.innerHTML = `
+                        <div class="no-results">
+                            <i class="fas fa-heart" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                            <h3>Your list is empty</h3>
+                            <p>Add movies and TV shows to your list to watch them later</p>
+                        </div>
+                    `;
+                }
+            }
+
+            // Render trending movies
+            function renderTrending() {
+                // Shuffle movies and take first 10
+                const trending = [...state.movies]
+                    .sort(() => 0.5 - Math.random())
+                    .slice(0, 10);
+                
+                elements.trendingRow.innerHTML = '';
+                trending.forEach(movie => {
+                    elements.trendingRow.appendChild(createMovieCard(movie));
+                });
+            }
+
+            // Render new releases
+            function renderNewReleases() {
+                // Sort by year and take first 10
+                const newReleases = [...state.movies]
+                    .sort((a, b) => b.year - a.year)
+                    .slice(0, 10);
+                
+                elements.newReleasesRow.innerHTML = '';
+                newReleases.forEach(movie => {
+                    elements.newReleasesRow.appendChild(createMovieCard(movie));
+                });
+            }
+
+            // Render popular movies
+            function renderPopular() {
+                // Sort by rating and take first 10
+                const popular = [...state.movies]
+                    .sort((a, b) => parseFloat(b.rating) - parseFloat(a.rating))
+                    .slice(0, 10);
+                
+                elements.popularRow.innerHTML = '';
+                popular.forEach(movie => {
+                    elements.popularRow.appendChild(createMovieCard(movie));
+                });
+            }
+
+            // Render recommended movies
+            function renderRecommended() {
+                // Mix of highly rated and recent movies
+                const recommended = [...state.movies]
+                    .filter(movie => parseFloat(movie.rating) > 85 && movie.year > 2015)
+                    .sort(() => 0.5 - Math.random())
+                    .slice(0, 10);
+                
+                elements.recommendedRow.innerHTML = '';
+                recommended.forEach(movie => {
+                    elements.recommendedRow.appendChild(createMovieCard(movie));
+                });
+            }
+
+            // Render live channels
+            function renderLiveChannels(channels) {
+                elements.liveChannels.innerHTML = '';
+                channels.forEach(channel => {
+                    const channelCard = document.createElement('div');
+                    channelCard.className = 'channel-card';
+                    channelCard.innerHTML = `
+                        <div class="channel-logo">
+                            <img src="${channel.logo}" alt="${channel.name}">
+                            ${channel.live ? '<span class="live-badge">LIVE</span>' : ''}
+                            <div class="play-btn">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                        <div class="channel-name">${channel.name}</div>
+                    `;
+                    
+                    channelCard.addEventListener('click', () => {
+                        elements.playerTitle.textContent = channel.name;
+                        elements.videoPlayer.src = channel.stream;
+                        elements.playerModal.classList.add('active');
+                        elements.videoPlayer.play();
+                    });
+                    
+                    elements.liveChannels.appendChild(channelCard);
+                });
+            }
+
+            // Render search results
+            function renderSearchResults(results) {
+                if (results.length > 0) {
+                    elements.noResults.style.display = 'none';
+                    elements.searchResultsRow.innerHTML = '';
+                    results.forEach(movie => {
+                        elements.searchResultsRow.appendChild(createMovieCard(movie));
+                    });
+                } else {
+                    elements.noResults.style.display = 'block';
+                    elements.searchResultsRow.innerHTML = '';
+                }
+            }
+
+            // Create movie card
+            function createMovieCard(movie) {
+                const isFavorite = state.favorites.some(fav => fav.id === movie.id);
+                
+                const card = document.createElement('div');
+                card.className = 'content-card';
+                card.innerHTML = `
+                    <div class="card-img" style="background-image: url('${movie.image}')">
+                        <div class="card-overlay">
+                            <h3 class="card-title">${movie.title}</h3>
+                            <div class="card-info">
+                                <span>${movie.rating}</span>
+                                <span>${movie.year}</span>
+                                <span>${movie.maturity}</span>
+                            </div>
+                            <div class="card-actions">
+                                <button class="action-btn play" title="Play">
+                                    <i class="fas fa-play"></i>
+                                </button>
+                                <button class="action-btn favorite ${isFavorite ? 'active' : ''}" title="${isFavorite ? 'Remove from list' : 'Add to my list'}">
+                                    <i class="fas ${isFavorite ? 'fa-check' : 'fa-plus'}"></i>
+                                </button>
+                                <button class="action-btn info" title="More info">
+                                    <i class="fas fa-info-circle"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Add event listeners
+                card.querySelector('.play').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    openVideoPlayer(movie);
+                });
+                
+                card.querySelector('.favorite').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    toggleFavorite(movie);
+                    
+                    // Update button state
+                    const icon = card.querySelector('.favorite i');
+                    if (state.favorites.some(fav => fav.id === movie.id)) {
+                        card.querySelector('.favorite').classList.add('active');
+                        icon.classList.remove('fa-plus');
+                        icon.classList.add('fa-check');
+                        card.querySelector('.favorite').setAttribute('title', 'Remove from list');
+                    } else {
+                        card.querySelector('.favorite').classList.remove('active');
+                        icon.classList.remove('fa-check');
+                        icon.classList.add('fa-plus');
+                        card.querySelector('.favorite').setAttribute('title', 'Add to my list');
+                    }
+                });
+                
+                card.querySelector('.info').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    alert(movie.description);
+                });
+                
+                return card;
+            }
+
+            // Public methods
+            return {
+                init: init
+            };
+        })(api);
+
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            app.init();
+        });
+    </script>
+</body>
+</html>
